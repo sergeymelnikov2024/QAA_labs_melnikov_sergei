@@ -89,5 +89,6 @@ public class Park {
 
         // Выводим информацию об аттракционах
         park.printAttractions();
+
     }
 }

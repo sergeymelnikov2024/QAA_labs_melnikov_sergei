@@ -1,6 +1,6 @@
 package ltsson_3;
 
-public class method {
+public class Counter {
     public static void main(String[] args) {
         // Вызов всех методов
         printThreeWords();
