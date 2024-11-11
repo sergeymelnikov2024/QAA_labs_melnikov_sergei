@@ -67,18 +67,57 @@ public class Animal {
 
         FoodBowl bowl = new FoodBowl(foodCount);
 
+        // Коты кушают из миски
         for (Cat cat : cats) {
             cat.eat(bowl);
-
-            System.out.print("Введите расстояние для кота " + cat.name + " для пробежки: ");
-            int catRunDistance = scanner.nextInt();
-            cat.run(catRunDistance);
-
-            System.out.print("Введите расстояние для кота " + cat.name + " для плавания: ");
-            int catSwimDistance = scanner.nextInt();
-            cat.swim(catSwimDistance);
         }
 
+        // Проверка сытости котов
+        for (Cat cat : cats) {
+            if (cat.isHungry()) {
+                System.out.println(cat.name + " голоден.");
+            } else {
+                System.out.println(cat.name + " сыт.");
+            }
+        }
+
+        // Показываем сколько еды осталось в миске
+        System.out.println("Осталось еды в миске: " + bowl.getFood() + " единиц.");
+
+        // Возможность добавления еды в миску и кормления голодных котов
+        while (!Cat.isAllCatsFed()) {
+            System.out.print("Хотите добавить еду в миску? (да/нет): ");
+            String answer = scanner.next();
+
+            if (answer.equalsIgnoreCase("да")) {
+                System.out.print("Введите количество еды для добавления: ");
+                int additionalFood = scanner.nextInt();
+                bowl.addFood(additionalFood);
+
+                // Коты снова кушают из миски
+                for (Cat cat : cats) {
+                    if (cat.isHungry()) {
+                        cat.eat(bowl);
+                    }
+                }
+
+                // Проверка сытости котов
+                for (Cat cat : cats) {
+                    if (cat.isHungry()) {
+                        System.out.println(cat.name + " голоден.");
+                    } else {
+                        System.out.println(cat.name + " сыт.");
+                    }
+                }
+
+                // Показываем сколько еды осталось в миске
+                System.out.println("Осталось еды в миске: " + bowl.getFood() + " единиц.");
+            } else {
+                break; // Если пользователь не хочет добавлять еду, выход из цикла
+            }
+        }
+
+        // Собака взаимодействует
         for (Dog dog : dogs) {
             System.out.print("Введите расстояние для собаки " + dog.name + " для пробежки: ");
             int dogRunDistance = scanner.nextInt();
@@ -87,6 +126,17 @@ public class Animal {
             System.out.print("Введите расстояние для собаки " + dog.name + " для плавания: ");
             int dogSwimDistance = scanner.nextInt();
             dog.swim(dogSwimDistance);
+        }
+
+        // Кот взаимодействует
+        for (Cat cat : cats) {
+            System.out.print("Введите расстояние для кота " + cat.name + " для пробежки: ");
+            int catRunDistance = scanner.nextInt();
+            cat.run(catRunDistance);
+
+            System.out.print("Введите расстояние для кота " + cat.name + " для плавания: ");
+            int catSwimDistance = scanner.nextInt();
+            cat.swim(catSwimDistance);
         }
 
         System.out.println("Создано животных: " + Animal.getAnimalCount());
@@ -112,6 +162,7 @@ public class Animal {
     public static class Cat extends Animal {
         private boolean isHungry = true;
         private static int catCount = 0;
+        private static int fedCats = 0;
 
         public Cat(String name) {
             super(name, 200, 0);
@@ -122,6 +173,7 @@ public class Animal {
             if (bowl.getFood() >= 10) {
                 bowl.setFood(bowl.getFood() - 10);
                 isHungry = false;
+                fedCats++;
                 System.out.println(name + " покушал.");
             } else {
                 System.out.println(name + " не может покушать, не хватает еды.");
@@ -132,8 +184,18 @@ public class Animal {
             return isHungry;
         }
 
+        public static boolean isAllCatsFed() {
+            return fedCats == catCount;
+        }
+
         public static int getCatCount() {
             return catCount;
+        }
+
+        @Override
+        public void swim(int distance) {
+            // Переопределяем метод swim для кота
+            System.out.println(name + " не умеет плавать.");
         }
     }
 
@@ -142,7 +204,7 @@ public class Animal {
         private int food;
 
         public FoodBowl(int food) {
-            this.food = food;
+            this.food = food >= 0 ? food : 0; // Обеспечиваем, что еда не может быть отрицательной
         }
 
         public int getFood() {
@@ -154,6 +216,15 @@ public class Animal {
                 this.food = food;
             } else {
                 System.out.println("Нельзя положить отрицательное количество еды в миску.");
+            }
+        }
+
+        public void addFood(int additionalFood) {
+            if (additionalFood > 0) {
+                this.food += additionalFood;
+                System.out.println("Добавлено " + additionalFood + " еды в миску.");
+            } else {
+                System.out.println("Нельзя добавить отрицательное количество еды.");
             }
         }
     }
