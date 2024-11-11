@@ -1,22 +1,25 @@
 package lesson_4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Класс Park
 public class Park {
     // Имя парка
     private String name;
-    // Массив аттракционов
-    private Attraction[] attractions;
+    // Список аттракционов
+    private List<Attraction> attractions;
 
     // Конструктор парка
-    public Park(String name, int numAttractions) {
+    public Park(String name) {
         // Инициализируем имя парка
         this.name = name;
-        // Создаем массив аттракционов заданной длины
-        this.attractions = new Attraction[numAttractions];
+        // Создаем пустой список аттракционов
+        this.attractions = new ArrayList<>();
     }
 
     // Внутренний класс Attraction представляет собой аттракцион
-    public static class Attraction {
+    private static class Attraction {
         // Имя аттракциона
         private String name;
         // Время работы аттракциона
@@ -49,33 +52,27 @@ public class Park {
     }
 
     // Метод для добавления аттракциона в парк
-    public void addAttraction(Attraction attraction, int index) {
-        // Проверяем, что индекс находится в пределах массива
-        if (index >= 0 && index < attractions.length) {
-            // Добавляем аттракцион в массив
-            attractions[index] = attraction;
-        }
+    public void addAttraction(Attraction attraction) {
+        // Добавляем аттракцион в список
+        attractions.add(attraction);
     }
 
     // Метод для вывода информации об аттракционах
     public void printAttractions() {
-        // Перебираем массив аттракционов
+        // Перебираем список аттракционов
         for (Attraction attraction : attractions) {
-            // Проверяем, что аттракцион не null
-            if (attraction != null) {
-                // Выводим информацию об аттракционе
-                System.out.println("Название аттракциона: " + attraction.getName());
-                System.out.println("Время работы: " + attraction.getWorkingHours());
-                System.out.println("Стоимость: " + attraction.getCost());
-                System.out.println();
-            }
+            // Выводим информацию об аттракционе
+            System.out.println("Название аттракциона: " + attraction.getName());
+            System.out.println("Время работы: " + attraction.getWorkingHours());
+            System.out.println("Стоимость: " + attraction.getCost());
+            System.out.println();
         }
     }
 
     // Основной метод
     public static void main(String[] args) {
         // Создаем парк развлечений
-        Park park = new Park("Парк развлечений", 3);
+        Park park = new Park("Парк развлечений");
 
         // Создаем три аттракциона
         Park.Attraction attraction1 = new Park.Attraction("Колесо обозрения", "10:00-20:00", 50.0);
@@ -83,9 +80,9 @@ public class Park {
         Park.Attraction attraction3 = new Park.Attraction("Карусель Вальс", "11:00-19:00", 30.0);
 
         // Добавляем аттракционы в парк
-        park.addAttraction(attraction1, 0);
-        park.addAttraction(attraction2, 1);
-        park.addAttraction(attraction3, 2);
+        park.addAttraction(attraction1);
+        park.addAttraction(attraction2);
+        park.addAttraction(attraction3);
 
         // Выводим информацию об аттракционах
         park.printAttractions();
